@@ -28,7 +28,16 @@ db.once('open', () => {
 });
 
 // Routes
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Use a conditional statement to determine the correct path based on the environment
+if (process.env.NODE_ENV === 'production') {
+  // Use the base URL of your hosted website
+  app.use('/uploads', express.static(path.join(__dirname, 'build', 'uploads')));
+} else {
+  // Use the local path for development
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+}
+
 
 app.use('/api/videos', videoRoutes);
 app.use('/api/subtitles', subtitleRoutes);
